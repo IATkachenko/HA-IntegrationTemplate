@@ -1,0 +1,7 @@
+{
+  "homeassistant":  "2022.6.0",
+  "name": "<IntegrationName>",
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "<integration_name>.zip"
+}
