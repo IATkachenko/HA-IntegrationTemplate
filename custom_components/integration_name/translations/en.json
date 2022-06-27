@@ -1,0 +1,23 @@
+{
+  "title": "<Integration Name>",
+  "options": {
+    "step": {
+      "init": {
+        "title": "<Integration Name> settings",
+        "description": "Settings for <Integration Name> integration.",
+        "data": {
+        }
+      }
+    }
+  },
+  "config": {
+    "step": {
+      "user": {
+        "title": "<Integration Name> settings",
+        "description": "Settings for <Integration Name> integration.",
+        "data": {
+        }
+      }
+    }
+  }
+}

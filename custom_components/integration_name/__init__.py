@@ -11,14 +11,15 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN, UPDATE_LISTENER
 
-PLATFORMS = []
+PLATFORMS: list[Platform] = []
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup(
     _hass: HomeAssistant,
     _config_entry: ConfigEntry,
-):
+) -> bool:
+    """Set up Integration Name."""
     return True
 
 
@@ -31,7 +32,11 @@ async def async_setup_entry(
     _LOGGER.info("Setting up %s ", config_entry.unique_id)
 
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][config_entry.unique_id]: DataUpdateCoordinator = None
+    hass.data[DOMAIN][config_entry.unique_id] = DataUpdater(
+        hass=hass,
+        logger=_LOGGER,
+        name=f"{DOMAIN}_updater",
+    )
 
     await hass.data[DOMAIN][config_entry.unique_id].async_config_entry_first_refresh()
     hass.config_entries.async_setup_platforms(config_entry, PLATFORMS)
@@ -47,10 +52,16 @@ async def async_update_options(hass: HomeAssistant, config_entry: ConfigEntry) -
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Remove entry configured via user interface."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unload_ok:
+    if await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         update_listener = hass.data[DOMAIN][entry.entry_id][UPDATE_LISTENER]
         update_listener()
         hass.data[DOMAIN].pop(entry.entry_id)
+        result = True
+    else:
+        result = False
 
-    return unload_ok
+    return result
+
+
+class DataUpdater(DataUpdateCoordinator):
+    """Data Updater for the integration."""

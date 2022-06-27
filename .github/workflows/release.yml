@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch for release'
+        description: "Branch for release"
         required: true
-        default: 'dev'
+        default: "dev"
   push:
     branches:
       - main
@@ -62,7 +62,7 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - name: "Set package name"
         working-directory: ./custom_components
         run: |
